@@ -4,6 +4,6 @@ const DB_URI = process.env.DB_URI
 const PORT = process.env.PORT || 3003
 
 module.exports = {
-    DB_URI,
-    PORT
+  DB_URI,
+  PORT
 }
