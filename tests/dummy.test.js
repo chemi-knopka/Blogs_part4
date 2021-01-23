@@ -92,3 +92,33 @@ describe('favourite blog', () => {
     expect(listHelper.favourityBlog(blogs)).toBe(blogs[2])
   })
 })
+
+
+// get function mostBlogs (returs author with most blogs)
+describe('author with most blogs', () => {
+  test('when given empty array must return zero', () => {
+    expect(listHelper.mostBlog([])).toBe(0)
+  })  
+  
+  test('when give array of one author must return that author itself', () => {
+    const result = listHelper.mostBlog(blogs.slice(0,1))
+    
+    const expectedRes = {
+      author:  'Michael Chan',
+      blogs:1
+    }
+
+    expect(result).toStrictEqual(expectedRes)
+  })
+  
+  test('when given list of arrays must return author with the most  blogs', () => {
+    const result = listHelper.mostBlog(blogs)
+      
+    const expectedRes = {
+      author: 'Robert C. Martin', 
+      blogs: 3
+    }
+
+    expect(result).toStrictEqual(expectedRes)
+  })
+})
