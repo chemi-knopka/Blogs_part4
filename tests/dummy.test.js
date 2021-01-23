@@ -110,7 +110,7 @@ describe('author with most blogs', () => {
 
     expect(result).toStrictEqual(expectedRes)
   })
-  
+
   test('when given list of arrays must return author with the most  blogs', () => {
     const result = listHelper.mostBlog(blogs)
       
@@ -119,6 +119,20 @@ describe('author with most blogs', () => {
       blogs: 3
     }
 
+    expect(result).toStrictEqual(expectedRes)
+  })
+})
+
+// test mostLikes functino should return author who has blog with the most likes
+// and total likes of his blogs
+describe('author with mostLikes', () => {
+  test('when given list of blogs must return author who has the best blog and total likes author has received', () => {
+    const result = listHelper.mostLikes(blogs)
+
+    const expectedRes = {
+      author: 'Edsger W. Dijkstra',
+      likes: 17
+    }
     expect(result).toStrictEqual(expectedRes)
   })
 })

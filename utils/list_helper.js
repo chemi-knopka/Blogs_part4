@@ -28,23 +28,49 @@ const favourityBlog = (blogs) => {
 // returns author with the most blogs and blogs count
 const mostBlog = (blogs) => {
   if (blogs.length === 0) {return 0}
-
+  
+  // group array by authors 
   const res = _.groupBy(blogs, (blog) => blog.author)
+  
+  // since _.groupBy() function returns an object, convert it to an array
   const entries = Object.entries(res)
 
+  // sort by blogs number authors have
   const sorted = _.sortBy(entries, (item) => item[1].length)
 
-  const bestAuthor = sorted[sorted.length-1]
+  // get name and total blog number of the last one
+  const bestAuthorName = sorted[sorted.length-1][0]
+  const totalBlogs = sorted[sorted.length-1][1].length
+
   return {
-    author: bestAuthor[0],
-    blogs: bestAuthor[1].length
+    author: bestAuthorName,
+    blogs: totalBlogs
   }
 
+}
+
+// returns author who has blog with the most likes and total likes of his blogs
+const mostLikes = (blogs) => {
+  if (blogs.length === 0) {return 0}
+  
+  // sort all blogs by likes and take author name of the last one
+  const famousAuthor = _.sortBy(blogs, (blog) => blog.likes)[blogs.length -1 ].author
+  
+  // get all likes the author has
+  const totalLikes = blogs
+    .filter(({author}) => author === famousAuthor )
+    .reduce((sum, item) => {return sum + item.likes}, 0)
+
+  return {
+    author: famousAuthor,
+    likes: totalLikes
+  }
 }
 
 module.exports = {
   dummy,
   totalLikes,
   favourityBlog,
-  mostBlog
+  mostBlog,
+  mostLikes
 }
