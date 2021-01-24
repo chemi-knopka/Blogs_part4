@@ -8,7 +8,6 @@ const requestLogger = require('./utils/middleware')
 
 mongoose.connect(config.DB_URI, { useNewUrlParser: true, useUnifiedTopology: true, useFindAndModify: false, useCreateIndex: true })
 
-
 app.use(cors())
 app.use(express.json())
 app.use(requestLogger)
