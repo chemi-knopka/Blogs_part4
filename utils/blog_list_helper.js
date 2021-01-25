@@ -1,4 +1,5 @@
 const mongoose = require('mongoose')
+const Blog = require('../models/blog')
 
 
 const initialBlogs = [ 
@@ -51,6 +52,12 @@ const initialBlogs = [
   }
 ]
 
+
+const blogsInDb = () => {
+  const blogs = Blog.find({})
+  return blogs
+}
+
 module.exports = {
-  initialBlogs
+  initialBlogs, blogsInDb
 }
