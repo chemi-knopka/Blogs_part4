@@ -72,6 +72,23 @@ test('if title and url properties are missing in the post request return 400', a
     .expect(400)
 })
 
+// delete specific note
+describe('delete specific note', () => {
+  test('delete specifig blog', async () => {
+    const notesAtStart = await helper.blogsInDb()
+    
+    const noteToDelete = notesAtStart[0]
+  
+    await api
+      .delete(`/api/blogs/${noteToDelete.id}`)
+      .expect(204)
+  
+    const notesAtEnd = await helper.blogsInDb()
+    expect(notesAtEnd).toHaveLength(notesAtStart.length - 1) 
+  })
+})
+
+
 
 afterAll(() => {
   mongoose.connection.close()
