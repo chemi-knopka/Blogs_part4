@@ -29,7 +29,7 @@ test('unique identifier is "id" not "_id"', async () => {
   })
 })
 
-test.only('blog post is added successfully by post methoed', async () => {
+test('blog post is added successfully by post methoed', async () => {
   const newBlog = {
     title: 'test', 
     author: 'test', 
@@ -42,10 +42,34 @@ test.only('blog post is added successfully by post methoed', async () => {
     .send(newBlog)
     .expect('Content-Type', /application\/json/)
 
-//   const blogsAtEnd = helper.blogsInDb()
-  const blogsAtEnd = await api.get('/api/blogs')
+  const blogsAtEnd = await helper.blogsInDb()
 
-  expect(blogsAtEnd.body).toHaveLength(helper.initialBlogs.length + 1)
+  expect(blogsAtEnd).toHaveLength(helper.initialBlogs.length + 1)
+})
+
+test('likes property is missing from the request, it will default to the value 0', async () => {
+  const newBlog = {
+    title: 'test', 
+    author: 'test', 
+    url: 'http://test.com'
+  }
+
+  const res = await api
+    .post('/api/blogs')
+    .send(newBlog)
+
+  expect(res.body.likes).toBe(0)
+})
+
+test('if title and url properties are missing in the post request return 400', async () => {
+  const newBlog = {
+    author: 'test'
+  }
+
+  await api
+    .post('/api/blogs')
+    .send(newBlog)
+    .expect(400)
 })
 
 

@@ -53,8 +53,9 @@ const initialBlogs = [
 ]
 
 
-const blogsInDb = () => {
-  const blogs = Blog.find({})
+const blogsInDb = async () => {
+  const blogs = await Blog.find({})
+
   return blogs
 }
 
