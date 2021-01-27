@@ -17,11 +17,7 @@ app.use(middleware.tokenExtractor)
 
 app.use('/api/blogs', blogsRouter) // blogs related routes
 app.use('/api/users', usersRouter) // users related routes
-<<<<<<< HEAD
-app.use('/api/login', loginRouter) // login related route
-=======
 app.use('/api/login', loginRouter) // login related routes
->>>>>>> new
 
 app.use(middleware.errorHandler)
 
