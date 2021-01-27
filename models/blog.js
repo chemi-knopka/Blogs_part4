@@ -15,10 +15,6 @@ const blogSchema = new mongoose.Schema({
     type: mongoose.Schema.Types.ObjectId,
     ref: 'Users_of_blogs'
   }
-<<<<<<< HEAD
-  
-=======
->>>>>>> new
 })
 
 blogSchema.set('toJSON', {
