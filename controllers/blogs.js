@@ -22,8 +22,6 @@ blogsRouter.get('/', async (request, response) => {
 blogsRouter.post('/', async (request, response) => {
   const blog = new Blog(request.body)
   
-  console.log('mama test', request.mama)
-
   // get token using middleware which saved it in the request object
   const tokenUser = jwt.verify(request.token, process.env.SECRET)
 
