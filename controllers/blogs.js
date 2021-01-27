@@ -19,12 +19,12 @@ blogsRouter.get('/', async (request, response) => {
 })
   
 blogsRouter.post('/', async (request, response) => {
-  const blog = new Blog(request.body)  
+  const blog = new Blog(request.body)
+  
+  // get token using middleware which saved it in the request object
+  const tokenUser = jwt.verify(request.token, process.env.SECRET)
 
-  const token = getTokenFrom(request)
-  const tokenUser = jwt.verify(token, process.env.SECRET)
-
-  if (!token || !tokenUser) {
+  if (!request.token || !tokenUser) {
     return response.status(401).json({ error: 'invalid token'})
   }
 
