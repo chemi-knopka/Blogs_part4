@@ -6,6 +6,7 @@ const User = require('../models/user')
 loginRouter.post('/', async (request, response) => {
   const body = request.body
 
+  console.log('searching for the user with usrname', body.username)
   const user = await User.findOne({ username: body.username })
   // compare provided password to the hash
   const passwordCorrect = user === null
@@ -13,9 +14,13 @@ loginRouter.post('/', async (request, response) => {
     : await bcrypt.compare(body.password, user.passwordHash)
     
   // return 401 if user not found or if password id incorect 
-  if (!user || !passwordCorrect){
+  if (!user){
     return response.status(401).json({
-      error: 'provided password is incorect of user not found'
+      error: 'user not found'
+    })
+  } else if (!passwordCorrect) {
+    return response.status(401).json({
+      error: 'provided password is incorect'
     })
   }
 

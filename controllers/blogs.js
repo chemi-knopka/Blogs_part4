@@ -5,13 +5,13 @@ const jwt = require('jsonwebtoken')
 require('express-async-errors')
 
 
-const getTokenFrom = (request) => {
-  const authorizationHeader = request.get('authorization')
-  if (authorizationHeader && authorizationHeader.toLowerCase().startsWith('bearer ')) {
-    return authorizationHeader.substring(7)
-  }
-  return null
-}
+// const getTokenFrom = (request) => {
+//   const authorizationHeader = request.get('authorization')
+//   if (authorizationHeader && authorizationHeader.toLowerCase().startsWith('bearer ')) {
+//     return authorizationHeader.substring(7)
+//   }
+//   return null
+// }
 
 blogsRouter.get('/', async (request, response) => {
   const blogs = await Blog
@@ -22,11 +22,13 @@ blogsRouter.get('/', async (request, response) => {
 blogsRouter.post('/', async (request, response) => {
   const blog = new Blog(request.body)
   
+  console.log('mama test', request.mama)
+
   // get token using middleware which saved it in the request object
   const tokenUser = jwt.verify(request.token, process.env.SECRET)
 
   if (!request.token || !tokenUser) {
-    return response.status(401).json({ error: 'invalid token'})
+    return response.status(401).json({ error: 'invalid token person is not authorized'})
   }
 
   // else if user exists with provided token find that user
@@ -35,11 +37,12 @@ blogsRouter.post('/', async (request, response) => {
   await user.save()
   
 
-  // if likes property is missing add property likes and 0 its value
+  // if likes property is missing add property likes and set 0 its value
   if (blog['likes'] === undefined) {
     blog.likes = 0
   }
 
+  // save blog
   blog.user = user.id
   const savedBlog = await blog.save()
   response.status(201).json(savedBlog)
@@ -58,8 +61,24 @@ blogsRouter.put('/:id', async (request, response) => {
 })
 
 blogsRouter.delete('/:id', async (request, response) => {
-  await Blog.findByIdAndRemove(request.params.id)
-  response.status(204).end()
+  const tokenUser = jwt.verify(request.token, process.env.SECRET)
+  // check if token is provided
+  if (!request.token || !tokenUser) {
+    return response.status(401).json({ error: 'invalid token'})
+  }
+
+  // findUser of provided 'token' and find blog of provided 'id'
+  const user = await User.findById(tokenUser.id)
+  const blog = await Blog.findById(request.params.id)
+  
+  // compare them blog user and token user if they match delete blog
+  if (blog.user.toString() === user.id) {
+    await blog.remove()
+    response.status(204).end()
+  } else {
+    return response.status(400).json({ error: 'user doesn\'t have delete permision'})
+  }
+
 })
 
 module.exports = blogsRouter

@@ -38,16 +38,30 @@ describe('when there are some blogs saved', () => {
 // adding blogs
 describe('addition of new blog', () => {
   test('blog post is added successfully by post methoed', async () => {
+    const forToken = {
+      'username': 'root',      
+      'password': 'secret'
+    }
+  
+    // generate token for the user (log in)
+    const token = await api
+      .post('/api/login')
+      .send(forToken)
+      .expect('content-type', /application\/json/)
+    
+    // blog to save
     const newBlog = {
-      title: 'test', 
+      title: 'shotik', 
       author: 'test', 
       url: 'http://test.com', 
       likes: 0 
     }
   
+    // post blog
     await api
       .post('/api/blogs')
       .send(newBlog)
+      .set('Authorization', `bearer ${token.body.token}`)
       .expect('Content-Type', /application\/json/)
   
     const blogsAtEnd = await helper.blogsInDb()
@@ -151,7 +165,7 @@ describe('when there is one initial user in db', () => {
     expect(usernames).toContain(newUser.username)
   })
 
-  test.only('create new user fails 400 status if the username is already taken', async () => {
+  test('create new user fails 400 status if the username is already taken', async () => {
     const usersAtStart = await helper.usersInDb()
 
     const newUser = {
