@@ -9,7 +9,7 @@
     "test": "NODE_ENV=test jest --verbose --runInBand",
     "lint": "eslint .",
     "lint:fix": "eslint --fix .",
-    "build:ui": "rm -rf build/ && cd ../blog_front && npm run build --prod && cp -r build/ ../blog_front"
+    "build:ui": "rm -rf build/ && cd ../blog_front && npm run build --prod && cp -r build/ ../blog_back"
   },
   "author": "",
   "license": "ISC",
