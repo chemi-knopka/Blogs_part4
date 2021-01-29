@@ -15,6 +15,7 @@ app.use(express.json())
 app.use(middleware.requestLogger)
 app.use(middleware.tokenExtractor)
 
+app.use(express.static('build'))
 app.use('/api/blogs', blogsRouter) // blogs related routes
 app.use('/api/users', usersRouter) // users related routes
 app.use('/api/login', loginRouter) // login related routes

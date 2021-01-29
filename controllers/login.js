@@ -6,7 +6,6 @@ const User = require('../models/user')
 loginRouter.post('/', async (request, response) => {
   const body = request.body
 
-  console.log('searching for the user with usrname', body.username)
   const user = await User.findOne({ username: body.username })
   // compare provided password to the hash
   const passwordCorrect = user === null
