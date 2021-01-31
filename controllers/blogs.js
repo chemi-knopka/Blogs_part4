@@ -50,8 +50,15 @@ blogsRouter.post('/', async (request, response) => {
 blogsRouter.put('/:id', async (request, response) => {
   const body = request.body
 
+  // get blog for user id
+  const blogForUserId = await Blog.findById(request.params.id).populate('user', { username: 1, name: 1 })
+  
   const blog = {
-    likes: body.likes
+    user: blogForUserId.user._id,
+    likes: body.likes,
+    author: body.author,
+    title: body.title,
+    url: body.url
   }
 
   const updatedBlog = await Blog.findByIdAndUpdate(request.params.id, blog, { new: true} )
@@ -77,6 +84,11 @@ blogsRouter.delete('/:id', async (request, response) => {
     return response.status(400).json({ error: 'user doesn\'t have delete permision'})
   }
 
+})
+
+blogsRouter.get('/reset', async (req, res) => {
+  await Blog.deleteMany({})
+  res.status(204).end()
 })
 
 module.exports = blogsRouter
