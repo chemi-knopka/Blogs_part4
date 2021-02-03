@@ -66,7 +66,9 @@ blogsRouter.put('/:id', async (request, response) => {
 })
 
 blogsRouter.delete('/:id', async (request, response) => {
+  
   const tokenUser = jwt.verify(request.token, process.env.SECRET)
+  
   // check if token is provided
   if (!request.token || !tokenUser) {
     return response.status(401).json({ error: 'invalid token'})
@@ -76,14 +78,13 @@ blogsRouter.delete('/:id', async (request, response) => {
   const user = await User.findById(tokenUser.id)
   const blog = await Blog.findById(request.params.id)
   
-  // compare them blog user and token user if they match delete blog
+  // compare blog user id and token user if they match delete blog
   if (blog.user.toString() === user.id) {
     await blog.remove()
     response.status(204).end()
   } else {
     return response.status(400).json({ error: 'user doesn\'t have delete permision'})
   }
-
 })
 
 blogsRouter.get('/reset', async (req, res) => {
